@@ -10,12 +10,26 @@
 
 # @lcpr-template-end
 # @lc code=start
-from collections import defaultdict
+from collections import Counter
 
 
 class Solution:
     def totalFruit(self, fruits: List[int]) -> int:
-        
+        collec = Counter()
+        ans = 0
+        j = 0
+        for i in range(len(fruits)):
+            collec[fruits[i]] += 1
+            while len(collec)>2:
+                collec[fruits[j]] -= 1
+                if collec[fruits[j]] == 0:
+                    collec.pop(fruits[j])
+                j+=1
+            ans = max(ans, i - j + 1)
+        return ans
+            
+
+
 
 
 # @lc code=end

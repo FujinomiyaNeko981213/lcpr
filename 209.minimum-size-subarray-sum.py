@@ -12,20 +12,18 @@
 # @lc code=start
 class Solution:
     def minSubArrayLen(self, target: int, nums: List[int]) -> int:
+        result = 0
         i = 0
         sum = 0
-        result = 0
-        #精髓在于，当你找到一个符合条件的result之后，其他所有的结果都应该比这个result小，即保持i,j的相对位置
         for j in range(len(nums)):
-            sum = sum + nums[j]
+            sum += nums[j]
             while sum >= target:
-                subl = j - i + 1
-                if result>0:
-                    result = min(result,subl)
+                if result == 0 :
+                    result = j - i + 1
                 else:
-                    result = subl
-                sum = sum - nums[i]
-                i = i + 1
+                    result = min(result, j - i + 1)
+                sum -= nums[i]
+                i += 1
         return result
 # @lc code=end
 

@@ -15,35 +15,39 @@ from typing import *
 
 # @lcpr-template-end
 # @lc code=start
-from collections import defaultdict
+# 1.使用Counter
+# 2.初始化min_i,min_j应该使用不在范围内的值
+# 3.当符合条件时，先更新结果，再更新用于比较的counter
+# 4.因为j指向终端，i指向开始，在寻找最小区间时，永远是i++
+from collections import Counter
 class Solution:
-    def compare_dicts(self, a, b):
-        for key in a:
-            if key not in b:
-                return False
-            if a[key] > b[key]:
+    def compare_dict(self, dict1, dict2) -> bool:
+        for key in dict1:
+            if dict2[key] == 0 or dict2[key] < dict1[key]:
                 return False
         return True
 
+
     def minWindow(self, s: str, t: str) -> str:
-        count_t = defaultdict(int)
-        count_s = defaultdict(int)
         s = list(s)
         t = list(t)
-        min_length = 0
-        min_i, min_j = 0,-1
-        for flag in range(len(t)):
-            count_t[t[flag]] +=1
+        dict_t = Counter()
+        dict_s = Counter()
+        for i in t:
+            dict_t[i]+=1
+        min_i = -1
+        min_j = -1
         i = 0
         for j in range(len(s)):
-            count_s[s[j]] +=1
-            while self.compare_dicts(count_t, count_s):
-                if min_length == 0 or min_length > (j - i + 1):
-                    min_length = j - i + 1
-                    min_i, min_j = i, j
-                count_s[s[i]] -= 1
-                i += 1
-        return ''.join(map(str, s[min_i:min_j + 1]))
+            dict_s[s[j]] +=1
+            while self.compare_dict(dict_t, dict_s):
+                if (min_i == -1 and min_j == -1) or ((min_j- min_i) > (j - i)):
+                    min_i, min_j = i,j
+                dict_s[s[i]] -= 1
+                i +=1
+        if min_i == -1 and min_j == -1:
+            return ''
+        return ''.join(s[min_i:min_j+1])
 
 
 
