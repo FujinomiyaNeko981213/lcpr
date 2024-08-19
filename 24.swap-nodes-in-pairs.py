@@ -17,7 +17,16 @@
 #         self.next = next
 class Solution:
     def swapPairs(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        
+        dummy_node = ListNode(0,head)
+        current = dummy_node
+        while current.next!=None and current.next.next!=None:
+            temp = current.next
+            current.next = current.next.next
+            temp.next = current.next.next
+            current.next.next = temp
+            current = current.next.next
+        return dummy_node.next
+
 # @lc code=end
 
 
